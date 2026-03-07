@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meeting Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <aside>
+        <h3>Documents</h3>
+        <ul>
+            {% for doc in documents %}
+            <li>{{ doc }}</li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <main>
+        <h2>Ask a question</h2>
+        <input id="query" placeholder="What was discussed about budgets?" />
+        <button onclick="ask()">Ask</button>
+
+        <pre id="response"></pre>
+    </main>
+</div>
+
+<script>
+function ask() {
+    const query = document.getElementById("query").value;
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({query})
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("response").textContent = data.answer;
+    });
+}
+</script>
+
+</body>
+</html>
